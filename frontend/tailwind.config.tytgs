@@ -1,0 +1,38 @@
+// ============================================
+// FILE: tailwind.config.ts
+// ============================================
+
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}",
+  ],
+
+  theme: {
+    extend: {
+      colors: {
+        primary: "#0B2C4A",
+        accent: "#1FAF9A",
+        secondary: "#6ED3C7",
+      },
+
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"],
+      },
+
+      boxShadow: {
+        soft:
+          "0 10px 40px rgba(0,0,0,0.06)",
+
+        premium:
+          "0 20px 60px rgba(0,0,0,0.08)",
+      },
+    },
+  },
+
+  plugins: [],
+};
+
+export default config;
