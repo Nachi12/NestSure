@@ -147,8 +147,7 @@ const Navbar = () => {
                 group
                 relative
                 overflow-hidden
-                bg-primary
-                hover:bg-[#08233d]
+                bg-[#1FAF9A] hover:bg-[#169d8b]
                 text-white
                 px-7 py-3.5
                 rounded-full

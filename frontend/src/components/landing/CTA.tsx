@@ -33,6 +33,7 @@ const stats = [
 const CTA = () => {
   return (
     <section className="relative py-36 overflow-hidden bg-[#071C30]">
+
       {/* BACKGROUND GRADIENTS */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-accent/20 rounded-full blur-3xl"></div>
 
@@ -42,6 +43,7 @@ const CTA = () => {
       <div className="absolute inset-0 opacity-[0.04] bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:80px_80px]"></div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+
         <motion.div
           initial={{ opacity: 0, y: 60 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -59,11 +61,13 @@ const CTA = () => {
             lg:p-20
           "
         >
+
           {/* INNER LIGHT */}
           <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent pointer-events-none"></div>
 
           {/* TOP BADGE */}
           <div className="flex justify-center">
+
             <div
               className="
                 inline-flex
@@ -84,11 +88,14 @@ const CTA = () => {
               <BadgeCheck size={18} />
 
               Trusted by Thousands of Homeowners
+
             </div>
+
           </div>
 
           {/* HEADING */}
           <div className="text-center max-w-4xl mx-auto mt-10">
+
             <h2
               className="
                 text-5xl
@@ -105,6 +112,7 @@ const CTA = () => {
               <span className="bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
                 Deserves Exceptional Care.
               </span>
+
             </h2>
 
             {/* DESCRIPTION */}
@@ -122,6 +130,7 @@ const CTA = () => {
               for cleaning, repairs, maintenance, and more —
               all through one seamless and trusted platform.
             </p>
+
           </div>
 
           {/* TRUST ITEMS */}
@@ -135,32 +144,40 @@ const CTA = () => {
               text-gray-300
             "
           >
+
             <div className="flex items-center gap-3">
+
               <ShieldCheck
                 className="text-accent"
                 size={22}
               />
 
               <span>Verified Professionals</span>
+
             </div>
 
             <div className="flex items-center gap-3">
+
               <Clock3
                 className="text-accent"
                 size={22}
               />
 
               <span>Fast Booking Experience</span>
+
             </div>
 
             <div className="flex items-center gap-3">
+
               <BadgeCheck
                 className="text-accent"
                 size={22}
               />
 
               <span>Transparent Pricing</span>
+
             </div>
+
           </div>
 
           {/* BUTTONS */}
@@ -175,8 +192,19 @@ const CTA = () => {
               gap-6
             "
           >
+
             {/* PRIMARY BUTTON */}
             <button
+              onClick={() => {
+                const section =
+                  document.getElementById("services");
+
+                if (section) {
+                  section.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }
+              }}
               className="
                 group
                 relative
@@ -195,7 +223,9 @@ const CTA = () => {
                 hover:scale-[1.03]
               "
             >
+
               <span className="relative z-10 flex items-center gap-3">
+
                 Book a Service
 
                 <ArrowRight
@@ -206,6 +236,7 @@ const CTA = () => {
                   "
                   size={20}
                 />
+
               </span>
 
               {/* BUTTON LIGHT */}
@@ -220,10 +251,21 @@ const CTA = () => {
                   duration-300
                 "
               ></div>
+
             </button>
 
             {/* SECONDARY BUTTON */}
             <button
+              onClick={() => {
+                const section =
+                  document.getElementById("services");
+
+                if (section) {
+                  section.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }
+              }}
               className="
                 border
                 border-white/15
@@ -243,6 +285,7 @@ const CTA = () => {
             >
               Explore Services
             </button>
+
           </div>
 
           {/* STATS */}
@@ -255,7 +298,9 @@ const CTA = () => {
               gap-10
             "
           >
+
             {stats.map((stat) => (
+
               <div
                 key={stat.label}
                 className="
@@ -274,6 +319,7 @@ const CTA = () => {
                   hover:border-white/10
                 "
               >
+
                 {/* GLOW */}
                 <div
                   className="
@@ -318,11 +364,17 @@ const CTA = () => {
                 >
                   {stat.label}
                 </p>
+
               </div>
+
             ))}
+
           </div>
+
         </motion.div>
+
       </div>
+
     </section>
   );
 };

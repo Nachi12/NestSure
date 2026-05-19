@@ -1,104 +1,385 @@
-
-// ============================================
-// FILE: src/components/landing/Hero.tsx
-// ============================================
-
 import { motion } from "framer-motion";
+
 import {
   ShieldCheck,
   Clock3,
   Star,
   Search,
+  ArrowRight,
 } from "lucide-react";
 
 const Hero = () => {
   return (
-    <section className="relative overflow-hidden bg-[#F7F9FC] pt-36 pb-28 lg:pt-44 lg:pb-36">
-      {/* BACKGROUND GLOW */}
-      <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#1FAF9A]/5 rounded-full blur-3xl"></div>
+    <section
+      className="
+        relative
+        overflow-hidden
+        bg-[#F7FAFC]
+        pt-36
+        pb-24
+      "
+    >
 
-      <div className="max-w-screen-2xl mx-auto px-6 lg:px-12">
+      {/* BACKGROUND GRADIENT */}
+      <div
+        className="
+          absolute
+          top-[-200px]
+          right-[-120px]
+          w-[500px]
+          h-[500px]
+          rounded-full
+          bg-accent/10
+          blur-3xl
+        "
+      />
+
+      <div
+        className="
+          absolute
+          bottom-[-180px]
+          left-[-100px]
+          w-[450px]
+          h-[450px]
+          rounded-full
+          bg-secondary/10
+          blur-3xl
+        "
+      />
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
         <div className="grid lg:grid-cols-2 gap-20 items-center">
+
           {/* LEFT CONTENT */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="relative z-10"
+            transition={{ duration: 0.8 }}
           >
-            {/* TOP BADGE */}
-            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#1FAF9A]/10 text-[#1FAF9A] text-sm font-medium tracking-wide border border-[#1FAF9A]/10">
-              <ShieldCheck size={16} />
-              Trusted Home Service Platform
+
+            {/* BADGE */}
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-3
+                px-5
+                py-3
+                rounded-full
+                bg-white
+                border
+                border-[#E5EEF5]
+                shadow-sm
+              "
+            >
+
+              <ShieldCheck
+                size={18}
+                className="text-accent"
+              />
+
+              <span
+                className="
+                  text-sm
+                  font-medium
+                  text-primary
+                "
+              >
+                Trusted Home Service Platform
+              </span>
+
             </div>
 
             {/* HEADING */}
-            <h1 className="mt-8 text-[48px] leading-[1.02] sm:text-[64px] lg:text-[82px] font-bold tracking-[-3px] text-[#0B2C4A] max-w-3xl">
-              Everything
+            <h1
+              className="
+                mt-8
+                text-5xl
+                lg:text-7xl
+                font-bold
+                leading-[1.05]
+                tracking-tight
+                text-primary
+              "
+            >
+              Premium Home
               <br />
-              Your Home
-              <br />
-              <span className="text-[#1FAF9A]">
-                Needs.
+
+              <span className="text-accent">
+                Services
               </span>
+
+              <br />
+
+              At Your Doorstep.
             </h1>
 
             {/* DESCRIPTION */}
-            <p className="mt-8 text-lg lg:text-xl text-gray-600 leading-relaxed max-w-2xl">
+            <p
+              className="
+                mt-8
+                text-lg
+                text-gray-600
+                leading-relaxed
+                max-w-2xl
+              "
+            >
               Book verified professionals for cleaning,
-              repairs, maintenance, and more — all from
-              one trusted platform built for modern homes.
+              repairs, plumbing, electrical work,
+              painting, and much more — all through one
+              seamless platform.
             </p>
 
             {/* SEARCH BAR */}
-            <div className="mt-10 flex flex-col sm:flex-row items-center gap-4 bg-white border border-gray-100 rounded-3xl p-3 shadow-[0_10px_40px_rgba(0,0,0,0.05)] max-w-2xl">
-              <div className="flex items-center gap-3 flex-1 w-full px-4">
-                <Search className="text-gray-400" size={20} />
+            <div
+              className="
+                mt-10
+                flex
+                items-center
+                bg-white
+                rounded-full
+                shadow-lg
+                border
+                border-gray-100
+                overflow-hidden
+                max-w-xl
+              "
+            >
 
-                <input
-                  type="text"
-                  placeholder="Search cleaning, plumbing, AC repair..."
-                  className="w-full bg-transparent outline-none text-gray-700 placeholder:text-gray-400 text-[15px]"
+              <div className="pl-6">
+
+                <Search
+                  size={20}
+                  className="text-gray-400"
                 />
+
               </div>
 
-              <button className="w-full sm:w-auto bg-[#0B2C4A] hover:bg-[#08233d] text-white px-8 py-4 rounded-2xl text-sm font-medium transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02]">
-                Search Services
+              <input
+                type="text"
+                placeholder="Search for services..."
+                className="
+                  flex-1
+                  px-4
+                  py-5
+                  outline-none
+                  text-gray-700
+                "
+              />
+
+              <button
+                onClick={() => {
+                  const section =
+                    document.getElementById(
+                      "services"
+                    );
+
+                  if (section) {
+                    section.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }
+                }}
+                className="
+                  bg-accent
+                  hover:bg-[#169d8b]
+                  text-white
+                  px-8
+                  py-5
+                  font-semibold
+                  transition-all
+                  duration-300
+                "
+              >
+                Search
               </button>
-            </div>
 
-            {/* TRUST ITEMS */}
-            <div className="mt-10 flex flex-wrap gap-8 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <ShieldCheck className="text-[#1FAF9A]" size={18} />
-                Verified Professionals
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Star className="text-[#1FAF9A]" size={18} />
-                Transparent Pricing
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Clock3 className="text-[#1FAF9A]" size={18} />
-                Fast Booking Experience
-              </div>
             </div>
 
             {/* CTA BUTTONS */}
-            <div className="mt-12 flex flex-col sm:flex-row gap-5">
-              <button className="bg-[#1FAF9A] hover:bg-[#169d8b] text-white px-9 py-4 rounded-full text-[15px] font-medium transition-all duration-300 shadow- 0_15px_50px_rgba(31,175,154,0.25)] hover:scale-[1.03]">
-                Book a Service
+            <div
+              className="
+                mt-12
+                flex
+                flex-col
+                sm:flex-row
+                gap-5
+              "
+            >
+
+              {/* PRIMARY BUTTON */}
+              <button
+                onClick={() => {
+                  const section =
+                    document.getElementById(
+                      "services"
+                    );
+
+                  if (section) {
+                    section.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }
+                }}
+                className="
+                  group
+                  bg-[#1FAF9A]
+                  hover:bg-[#169d8b]
+                  text-white
+                  px-9
+                  py-4
+                  rounded-full
+                  text-[15px]
+                  font-semibold
+                  transition-all
+                  duration-300
+                  shadow-[0_15px_50px_rgba(31,175,154,0.25)]
+                  hover:scale-[1.03]
+                "
+              >
+
+                <span className="flex items-center gap-3">
+
+                  Book a Service
+
+                  <ArrowRight
+                    size={18}
+                    className="
+                      transition-transform
+                      duration-300
+                      group-hover:translate-x-1
+                    "
+                  />
+
+                </span>
+
               </button>
 
-              <button className="border border-[#0B2C4A]/10 bg-white hover:bg-[#0B2C4A] hover:text-white text-[#0B2C4A] px-9 py-4 rounded-full text-[15px] font-medium transition-all duration-300 shadow-sm">
+              {/* SECONDARY BUTTON */}
+              <button
+                onClick={() => {
+                  const section =
+                    document.getElementById(
+                      "how-it-works"
+                    );
+
+                  if (section) {
+                    section.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }
+                }}
+                className="
+                  border
+                  border-[#0B2C4A]/10
+                  bg-white
+                  hover:bg-[#0B2C4A]
+                  hover:text-white
+                  text-[#0B2C4A]
+                  px-9
+                  py-4
+                  rounded-full
+                  text-[15px]
+                  font-semibold
+                  transition-all
+                  duration-300
+                "
+              >
                 Explore Services
               </button>
+
             </div>
+
+            {/* TRUST INFO */}
+            <div
+              className="
+                mt-14
+                flex
+                flex-wrap
+                items-center
+                gap-8
+              "
+            >
+
+              <div className="flex items-center gap-3">
+
+                <div
+                  className="
+                    w-12
+                    h-12
+                    rounded-full
+                    bg-white
+                    shadow-md
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+
+                  <Star
+                    size={18}
+                    className="text-yellow-500"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h4 className="font-semibold text-primary">
+                    4.9/5 Ratings
+                  </h4>
+
+                  <p className="text-sm text-gray-500">
+                    Trusted by thousands
+                  </p>
+
+                </div>
+
+              </div>
+
+              <div className="flex items-center gap-3">
+
+                <div
+                  className="
+                    w-12
+                    h-12
+                    rounded-full
+                    bg-white
+                    shadow-md
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+
+                  <Clock3
+                    size={18}
+                    className="text-accent"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h4 className="font-semibold text-primary">
+                    Fast Booking
+                  </h4>
+
+                  <p className="text-sm text-gray-500">
+                    Quick & seamless process
+                  </p>
+
+                </div>
+
+              </div>
+
+            </div>
+
           </motion.div>
 
-          {/* RIGHT VISUAL */}
-          <motion.div
+          {/* RIGHT IMAGE */}
+       <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7 }}
@@ -164,8 +445,11 @@ const Hero = () => {
               Home Cleaning
             </div>
           </motion.div>
+
         </div>
+
       </div>
+
     </section>
   );
 };
