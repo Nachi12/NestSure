@@ -115,7 +115,7 @@ const Navbar = () => {
           {/* RIGHT SIDE */}
           <div className="hidden lg:flex items-center gap-5">
 
-            <button
+            {/* <button
               onClick={() => scrollToSection("contact")}
               className="
                 text-[15px]
@@ -126,7 +126,7 @@ const Navbar = () => {
               "
             >
               Contact
-            </button>
+            </button> */}
 
             <Link
               to="/login"

@@ -1,5 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
+import {
+  ShieldCheck,
+  Clock3,
+  BadgeCheck,
+  MapPin,
+  Phone,
+  User,
+  FileText,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
@@ -7,7 +19,17 @@ import Footer from "../layout/Footer";
 const ServiceDetails = () => {
   const { slug } = useParams();
 
-  const serviceName = slug?.replace(/-/g, " ");
+  // FIX AUTO SCROLL TO FOOTER
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
+  const serviceName = slug
+    ?.replace(/-/g, " ")
+    .replace(/\b\w/g, (char) => char.toUpperCase());
 
   const [formData, setFormData] = useState({
     name: "",
@@ -20,7 +42,6 @@ const ServiceDetails = () => {
 
   const [success, setSuccess] = useState(false);
 
-  // HANDLE INPUTS
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement
@@ -32,8 +53,19 @@ const ServiceDetails = () => {
     });
   };
 
-  // HANDLE SUBMIT
+  // BOOK SERVICE
   const handleBooking = async () => {
+    if (
+      !formData.name ||
+      !formData.phone ||
+      !formData.address ||
+      !formData.issue
+    ) {
+      alert("Please fill all fields");
+
+      return;
+    }
+
     try {
       setLoading(true);
 
@@ -64,6 +96,11 @@ const ServiceDetails = () => {
           address: "",
           issue: "",
         });
+
+        // REMOVE SUCCESS AFTER 4 SEC
+        setTimeout(() => {
+          setSuccess(false);
+        }, 4000);
       } else {
         alert(data.message || "Booking failed");
       }
@@ -79,167 +116,481 @@ const ServiceDetails = () => {
   return (
     <div className="min-h-screen bg-[#F7F9FC]">
 
+      {/* NAVBAR */}
       <Navbar />
 
-      <div className="pt-32 px-6 pb-20">
+      <section className="pt-32 pb-24 px-6">
 
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 items-start">
 
-          {/* LEFT */}
+          {/* LEFT CONTENT */}
           <div>
 
-            <p className="text-accent font-medium mb-3">
-              NestSure Service
-            </p>
+            {/* TAG */}
+            <div
+              className="
+                inline-flex
+                items-center
+                gap-3
+                px-5
+                py-3
+                rounded-full
+                bg-white
+                border
+                border-gray-100
+                shadow-sm
+              "
+            >
 
-            <h1 className="text-5xl font-bold text-primary capitalize">
+              <Sparkles
+                size={18}
+                className="text-accent"
+              />
+
+              <span className="font-medium text-primary">
+                NestSure Premium Service
+              </span>
+
+            </div>
+
+            {/* TITLE */}
+            <h1
+              className="
+                mt-8
+                text-5xl
+                lg:text-6xl
+                font-bold
+                text-primary
+                leading-tight
+              "
+            >
               {serviceName}
             </h1>
 
-            <p className="mt-6 text-lg text-gray-600 leading-relaxed">
+            {/* DESCRIPTION */}
+            <p
+              className="
+                mt-6
+                text-lg
+                text-gray-600
+                leading-relaxed
+                max-w-2xl
+              "
+            >
               Book trusted and verified professionals
-              for premium {serviceName} services.
+              for high-quality {serviceName?.toLowerCase()}
+              services with transparent pricing and
+              seamless booking experience.
             </p>
 
-            <div className="mt-10 space-y-5">
+            {/* FEATURES */}
+            <div className="mt-12 space-y-5">
 
-              <div className="bg-white p-5 rounded-2xl shadow-sm">
-                ✓ Verified Professionals
+              <div
+                className="
+                  bg-white
+                  rounded-3xl
+                  p-5
+                  flex
+                  items-center
+                  gap-4
+                  shadow-sm
+                  border
+                  border-gray-100
+                "
+              >
+
+                <div
+                  className="
+                    w-14
+                    h-14
+                    rounded-2xl
+                    bg-accent/10
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+
+                  <ShieldCheck
+                    size={24}
+                    className="text-accent"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h3 className="font-semibold text-primary">
+                    Verified Professionals
+                  </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    Background checked experts
+                  </p>
+
+                </div>
+
               </div>
 
-              <div className="bg-white p-5 rounded-2xl shadow-sm">
-                ✓ Affordable Pricing
+              <div
+                className="
+                  bg-white
+                  rounded-3xl
+                  p-5
+                  flex
+                  items-center
+                  gap-4
+                  shadow-sm
+                  border
+                  border-gray-100
+                "
+              >
+
+                <div
+                  className="
+                    w-14
+                    h-14
+                    rounded-2xl
+                    bg-accent/10
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+
+                  <Clock3
+                    size={24}
+                    className="text-accent"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h3 className="font-semibold text-primary">
+                    Fast Booking
+                  </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    Easy & quick scheduling
+                  </p>
+
+                </div>
+
               </div>
 
-              <div className="bg-white p-5 rounded-2xl shadow-sm">
-                ✓ Fast Booking
-              </div>
+              <div
+                className="
+                  bg-white
+                  rounded-3xl
+                  p-5
+                  flex
+                  items-center
+                  gap-4
+                  shadow-sm
+                  border
+                  border-gray-100
+                "
+              >
 
-              <div className="bg-white p-5 rounded-2xl shadow-sm">
-                ✓ Safe & Secure
+                <div
+                  className="
+                    w-14
+                    h-14
+                    rounded-2xl
+                    bg-accent/10
+                    flex
+                    items-center
+                    justify-center
+                  "
+                >
+
+                  <BadgeCheck
+                    size={24}
+                    className="text-accent"
+                  />
+
+                </div>
+
+                <div>
+
+                  <h3 className="font-semibold text-primary">
+                    Transparent Pricing
+                  </h3>
+
+                  <p className="text-gray-500 text-sm">
+                    No hidden charges
+                  </p>
+
+                </div>
+
               </div>
 
             </div>
+
           </div>
 
-          {/* RIGHT BOOKING FORM */}
+          {/* BOOKING FORM */}
           <div>
 
-            <div className="bg-white rounded-[32px] p-8 shadow-xl">
+            <div
+              className="
+                bg-white
+                rounded-[36px]
+                p-8
+                shadow-[0_20px_60px_rgba(0,0,0,0.08)]
+                border
+                border-gray-100
+                sticky
+                top-28
+              "
+            >
 
-              <h2 className="text-3xl font-semibold text-primary">
-                Book This Service
-              </h2>
+              {/* HEADER */}
+              <div>
 
-              <p className="text-gray-500 mt-2">
-                Fill your details to continue.
-              </p>
+                <h2 className="text-3xl font-bold text-primary">
+                  Book This Service
+                </h2>
 
+                <p className="text-gray-500 mt-3">
+                  Fill your details and our professional
+                  team will contact you shortly.
+                </p>
+
+              </div>
+
+              {/* SUCCESS MESSAGE */}
               {success && (
                 <div
                   className="
                     mt-6
                     bg-green-100
                     text-green-700
-                    p-4
+                    border
+                    border-green-200
                     rounded-2xl
+                    p-4
+                    font-medium
                   "
                 >
                   Booking submitted successfully ✅
                 </div>
               )}
 
+              {/* FORM */}
               <div className="mt-8 space-y-5">
 
                 {/* NAME */}
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Full Name"
-                  className="
-                    w-full
-                    border
-                    border-gray-200
-                    rounded-2xl
-                    p-4
-                    outline-none
-                  "
-                />
+                <div className="relative">
+
+                  <User
+                    size={18}
+                    className="
+                      absolute
+                      left-5
+                      top-1/2
+                      -translate-y-1/2
+                      text-gray-400
+                    "
+                  />
+
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Full Name"
+                    className="
+                      w-full
+                      rounded-2xl
+                      border
+                      border-gray-200
+                      bg-[#F8FAFC]
+                      py-4
+                      pl-14
+                      pr-5
+                      outline-none
+                      transition-all
+                      duration-300
+                      focus:border-accent
+                      focus:bg-white
+                    "
+                  />
+
+                </div>
 
                 {/* PHONE */}
-                <input
-                  type="text"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Phone Number"
-                  className="
-                    w-full
-                    border
-                    border-gray-200
-                    rounded-2xl
-                    p-4
-                    outline-none
-                  "
-                />
+                <div className="relative">
+
+                  <Phone
+                    size={18}
+                    className="
+                      absolute
+                      left-5
+                      top-1/2
+                      -translate-y-1/2
+                      text-gray-400
+                    "
+                  />
+
+                  <input
+                    type="text"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number"
+                    className="
+                      w-full
+                      rounded-2xl
+                      border
+                      border-gray-200
+                      bg-[#F8FAFC]
+                      py-4
+                      pl-14
+                      pr-5
+                      outline-none
+                      transition-all
+                      duration-300
+                      focus:border-accent
+                      focus:bg-white
+                    "
+                  />
+
+                </div>
 
                 {/* ADDRESS */}
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  placeholder="Address"
-                  className="
-                    w-full
-                    border
-                    border-gray-200
-                    rounded-2xl
-                    p-4
-                    outline-none
-                  "
-                />
+                <div className="relative">
+
+                  <MapPin
+                    size={18}
+                    className="
+                      absolute
+                      left-5
+                      top-5
+                      text-gray-400
+                    "
+                  />
+
+                  <textarea
+                    rows={3}
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    placeholder="Address"
+                    className="
+                      w-full
+                      rounded-2xl
+                      border
+                      border-gray-200
+                      bg-[#F8FAFC]
+                      py-4
+                      pl-14
+                      pr-5
+                      outline-none
+                      resize-none
+                      transition-all
+                      duration-300
+                      focus:border-accent
+                      focus:bg-white
+                    "
+                  />
+
+                </div>
 
                 {/* ISSUE */}
-                <textarea
-                  rows={4}
-                  name="issue"
-                  value={formData.issue}
-                  onChange={handleChange}
-                  placeholder="Describe your issue"
-                  className="
-                    w-full
-                    border
-                    border-gray-200
-                    rounded-2xl
-                    p-4
-                    outline-none
-                    resize-none
-                  "
-                />
+                <div className="relative">
+
+                  <FileText
+                    size={18}
+                    className="
+                      absolute
+                      left-5
+                      top-5
+                      text-gray-400
+                    "
+                  />
+
+                  <textarea
+                    rows={5}
+                    name="issue"
+                    value={formData.issue}
+                    onChange={handleChange}
+                    placeholder="Describe your issue"
+                    className="
+                      w-full
+                      rounded-2xl
+                      border
+                      border-gray-200
+                      bg-[#F8FAFC]
+                      py-4
+                      pl-14
+                      pr-5
+                      outline-none
+                      resize-none
+                      transition-all
+                      duration-300
+                      focus:border-accent
+                      focus:bg-white
+                    "
+                  />
+
+                </div>
 
                 {/* BUTTON */}
                 <button
                   onClick={handleBooking}
                   disabled={loading}
                   className="
+                    group
+                    relative
+                    overflow-hidden
                     w-full
-                    bg-[#08233d]
-                    hover:bg-[#104474]
-                    text-white
-                    py-4
                     rounded-2xl
+                    bg-accent
+                    hover:bg-[#169d8b]
+                    py-4
+                    text-white
+                    font-semibold
+                    text-lg
                     transition-all
                     duration-300
-                    text-lg
-                    font-medium
+                    shadow-[0_15px_40px_rgba(31,175,154,0.25)]
+                    hover:shadow-[0_20px_50px_rgba(31,175,154,0.35)]
+                    disabled:opacity-70
+                    disabled:cursor-not-allowed
                   "
                 >
-                  {loading
-                    ? "Booking..."
-                    : "Confirm Booking"}
+
+                  <span
+                    className="
+                      relative
+                      z-10
+                      flex
+                      items-center
+                      justify-center
+                      gap-3
+                    "
+                  >
+
+                    {loading
+                      ? "Booking..."
+                      : "Confirm Booking"}
+
+                    {!loading && (
+                      <ArrowRight
+                        size={20}
+                        className="
+                          transition-transform
+                          duration-300
+                          group-hover:translate-x-1
+                        "
+                      />
+                    )}
+
+                  </span>
+
                 </button>
 
               </div>
@@ -250,8 +601,9 @@ const ServiceDetails = () => {
 
         </div>
 
-      </div>
+      </section>
 
+      {/* FOOTER */}
       <Footer />
 
     </div>
