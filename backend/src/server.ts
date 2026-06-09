@@ -144,13 +144,12 @@ app.get("/api/bookings", async (req, res) => {
 // 404 ROUTE
 // ============================================
 
-app.use("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: "Route Not Found",
   });
 });
-
 
 const PORT = process.env.PORT || 5001;
 

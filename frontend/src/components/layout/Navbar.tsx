@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 const navLinks = [
   { name: "Home", id: "home" },
   { name: "Services", id: "services" },
@@ -13,7 +12,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   // SCROLL FUNCTION
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
@@ -41,7 +40,7 @@ const Navbar = () => {
 
           {/* LOGO */}
           <div
-            onClick={() => scrollToSection("home")}
+           onClick={() => navigate("/")}
             className="flex items-center gap-4 cursor-pointer"
           >
             <motion.div
@@ -142,7 +141,7 @@ const Navbar = () => {
             </Link>
 
             <button
-              onClick={() => scrollToSection("services")}
+            onClick={() => navigate("/service/home-cleaning")}
               className="
                 group
                 relative
@@ -228,14 +227,18 @@ const Navbar = () => {
               ))}
 
               <button
-                onClick={() => scrollToSection("services")}
+             onClick={() => {
+  navigate("/service/home-cleaning");
+
+  setMobileMenuOpen(false);
+}}
                 className="
                   block
                   text-center
                   w-full
                   mt-4
-                  bg-primary
-                  hover:bg-[#08233d]
+                  bg-[#08233d]
+                  hover:bg-[#0e375f]
                   text-white
                   py-4
                   rounded-2xl

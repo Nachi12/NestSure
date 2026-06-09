@@ -1,51 +1,77 @@
-import { signInWithPopup } from "firebase/auth";
+import {
+  signInWithPopup,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
-import api from "./api";
-import { getFirebaseAuth, googleProvider } from "./firebase";
+import { auth } from "../config/firebase";
 
-export type AuthUser = {
-  id: string;
-  name: string;
-  email: string;
-  authProvider: "local" | "google";
+const provider = new GoogleAuthProvider();
+
+// ============================================
+// GOOGLE LOGIN
+// ============================================
+
+export const loginWithGoogle = async () => {
+  try {
+    const result = await signInWithPopup(
+      auth,
+      provider
+    );
+
+    return result.user;
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
 };
 
-export type AuthResponse = {
-  success: boolean;
-  token: string;
-  user: AuthUser;
-};
+// ============================================
+// EMAIL LOGIN
+// ============================================
 
-export const loginWithEmail = async (email: string, password: string) => {
-  const { data } = await api.post<AuthResponse>("/auth/login", {
-    email,
-    password,
-  });
-
-  return data;
-};
-
-export const registerWithEmail = async (
-  name: string,
+export const loginWithEmail = async (
   email: string,
   password: string
 ) => {
-  const { data } = await api.post<AuthResponse>("/auth/register", {
-    name,
-    email,
-    password,
-  });
+  try {
+    const result =
+      await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-  return data;
+    return result.user;
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
 };
 
-export const loginWithGoogle = async () => {
-  const result = await signInWithPopup(getFirebaseAuth(), googleProvider);
-  const idToken = await result.user.getIdToken();
+// ============================================
+// EMAIL REGISTER
+// ============================================
 
-  const { data } = await api.post<AuthResponse>("/auth/google", {
-    idToken,
-  });
+export const registerWithEmail = async (
+  email: string,
+  password: string
+) => {
+  try {
+    const result =
+      await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-  return data;
+    return result.user;
+  } catch (error) {
+    console.log(error);
+
+    throw error;
+  }
 };
