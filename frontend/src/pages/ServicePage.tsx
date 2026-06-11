@@ -14,7 +14,7 @@ import Footer from "../components/layout/Footer";
 
 import ServiceCategoryCard from "../components/service/ServiceCategoryCard";
 
-import BookingSidebar from "../components/service/BookingSidebar";
+import BookingSideBar from "../components/service/BookingSideBar";
 
 import { servicesData } from "../data/servicesData";
 
@@ -232,7 +232,7 @@ const ServicePage = () => {
             {/* RIGHT */}
             <div>
 
-              <BookingSidebar
+              <BookingSideBar
                 selectedVariant={selectedVariant}
               />
 
