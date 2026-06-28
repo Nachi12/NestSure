@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+// the comment of the testing
 const bookingSchema = new mongoose.Schema(
   {
     service: {
