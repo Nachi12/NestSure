@@ -126,9 +126,9 @@ const CTA = () => {
                 mx-auto
               "
             >
-              NestSure connects you with verified professionals
-              for cleaning, repairs, maintenance, and more —
-              all through one seamless and trusted platform.
+              Don't wait for home issues to escalate. Book verified professionals
+              for cleaning, repairs, maintenance, and more — all through one seamless
+              and trusted platform. Get started today.
             </p>
 
           </div>

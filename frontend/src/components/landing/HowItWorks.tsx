@@ -49,8 +49,7 @@ const HowItWorks = () => {
           </h2>
 
           <p className="mt-6 text-lg text-gray-600 leading-relaxed">
-            NestSure makes booking home services effortless, transparent,
-            and reliable.
+            Experience a seamless booking process with transparent pricing, verified professionals, and reliable service from start to finish.
           </p>
         </div>
 

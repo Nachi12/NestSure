@@ -7,23 +7,30 @@ import {
 
 type Variant = {
   id: number;
-
+  selectionKey: string;
+  category: string;
   name: string;
-
   price: number;
-
   duration: string;
-
   features: string[];
 };
 
 type Props = {
-  selectedVariant: Variant | null;
+  selectedServices: Variant[];
+  onCheckout: () => void;
 };
 
 const BookingSidebar = ({
-  selectedVariant,
+  selectedServices,
+  onCheckout,
 }: Props) => {
+  const totalPrice = selectedServices.reduce(
+    (sum, service) => sum + service.price,
+    0
+  );
+
+  const totalServices = selectedServices.length;
+
   return (
     <div
       className="
@@ -31,7 +38,6 @@ const BookingSidebar = ({
         top-28
       "
     >
-
       <div
         className="
           bg-white
@@ -42,10 +48,8 @@ const BookingSidebar = ({
           overflow-hidden
         "
       >
-
         {/* HEADER */}
         <div className="p-8 border-b border-gray-100">
-
           <h2
             className="
               text-3xl
@@ -57,18 +61,14 @@ const BookingSidebar = ({
           </h2>
 
           <p className="text-gray-500 mt-3">
-            Review your selected service.
+            Review your selected services.
           </p>
-
         </div>
 
         {/* CONTENT */}
         <div className="p-8">
-
-          {!selectedVariant ? (
-
+          {selectedServices.length === 0 ? (
             <div className="text-center py-10">
-
               <div
                 className="
                   w-20
@@ -81,12 +81,10 @@ const BookingSidebar = ({
                   justify-center
                 "
               >
-
                 <ArrowRight
                   size={28}
                   className="text-gray-400"
                 />
-
               </div>
 
               <h3
@@ -97,134 +95,109 @@ const BookingSidebar = ({
                   text-primary
                 "
               >
-                No Service Selected
+                No Services Selected
               </h3>
 
               <p className="mt-3 text-gray-500">
-                Choose a service package to continue.
+                Choose one or more services to continue.
               </p>
-
             </div>
-
           ) : (
-
             <>
+              {/* SERVICES */}
+              <div className="space-y-4">
+                {selectedServices.map((service) => (
+                  <div
+                    key={service.selectionKey}
+                    className="
+                      rounded-3xl
+                      bg-[#F7FAFC]
+                      p-5
+                    "
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3
+                          className="
+                            text-lg
+                            font-bold
+                            text-primary
+                          "
+                        >
+                          {service.name}
+                        </h3>
 
-              {/* PACKAGE */}
+                        <p className="mt-1 text-sm text-gray-500">
+                          {service.category}
+                        </p>
+
+                        <div
+                          className="
+                            mt-2
+                            flex
+                            items-center
+                            gap-2
+                            text-gray-500
+                          "
+                        >
+                          <Clock3 size={16} />
+                          <span>{service.duration}</span>
+                        </div>
+                      </div>
+
+                      <div
+                        className="
+                          text-xl
+                          font-bold
+                          text-primary
+                        "
+                      >
+                        ₹{service.price}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* TOTALS */}
               <div
                 className="
+                  mt-6
                   rounded-3xl
-                  bg-[#F7FAFC]
+                  border
+                  border-gray-100
                   p-6
                 "
               >
-
-                <h3
-                  className="
-                    text-2xl
-                    font-bold
-                    text-primary
-                  "
-                >
-                  {selectedVariant.name}
-                </h3>
-
-                <div
-                  className="
-                    mt-4
-                    flex
-                    items-center
-                    gap-3
-                    text-gray-500
-                  "
-                >
-
-                  <Clock3 size={18} />
-
-                  <span>
-                    {selectedVariant.duration}
+                <div className="flex justify-between">
+                  <span className="text-gray-500">
+                    Services
                   </span>
 
+                  <span className="font-semibold text-primary">
+                    {totalServices}
+                  </span>
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-4 flex justify-between">
+                  <span className="text-gray-500">
+                    Total Amount
+                  </span>
 
-                  <h4
+                  <span
                     className="
-                      text-5xl
+                      text-3xl
                       font-bold
                       text-primary
                     "
                   >
-                    ₹{selectedVariant.price}
-                  </h4>
-
+                    ₹{totalPrice}
+                  </span>
                 </div>
-
-              </div>
-
-              {/* FEATURES */}
-              <div className="mt-8">
-
-                <h4
-                  className="
-                    text-xl
-                    font-semibold
-                    text-primary
-                  "
-                >
-                  Included Features
-                </h4>
-
-                <div className="mt-5 space-y-4">
-
-                  {selectedVariant.features.map(
-                    (feature, index) => (
-
-                      <div
-                        key={index}
-                        className="
-                          flex
-                          items-center
-                          gap-4
-                        "
-                      >
-
-                        <div
-                          className="
-                            w-8
-                            h-8
-                            rounded-full
-                            bg-accent/10
-                            flex
-                            items-center
-                            justify-center
-                          "
-                        >
-
-                          <BadgeCheck
-                            size={16}
-                            className="text-accent"
-                          />
-
-                        </div>
-
-                        <span className="text-gray-600">
-                          {feature}
-                        </span>
-
-                      </div>
-
-                    )
-                  )}
-
-                </div>
-
               </div>
 
               {/* TRUST */}
               <div className="mt-10 space-y-5">
-
                 <div
                   className="
                     flex
@@ -232,7 +205,6 @@ const BookingSidebar = ({
                     gap-4
                   "
                 >
-
                   <ShieldCheck
                     size={20}
                     className="text-accent"
@@ -241,7 +213,6 @@ const BookingSidebar = ({
                   <span className="text-gray-600">
                     Verified Professionals
                   </span>
-
                 </div>
 
                 <div
@@ -251,7 +222,6 @@ const BookingSidebar = ({
                     gap-4
                   "
                 >
-
                   <BadgeCheck
                     size={20}
                     className="text-accent"
@@ -260,13 +230,12 @@ const BookingSidebar = ({
                   <span className="text-gray-600">
                     Transparent Pricing
                   </span>
-
                 </div>
-
               </div>
 
               {/* BUTTON */}
               <button
+                onClick={onCheckout}
                 className="
                   mt-10
                   group
@@ -287,8 +256,7 @@ const BookingSidebar = ({
                   shadow-[0_15px_40px_rgba(31,175,154,0.25)]
                 "
               >
-
-                Continue Booking
+                Proceed to Checkout
 
                 <ArrowRight
                   size={20}
@@ -298,17 +266,11 @@ const BookingSidebar = ({
                     group-hover:translate-x-1
                   "
                 />
-
               </button>
-
             </>
-
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 };

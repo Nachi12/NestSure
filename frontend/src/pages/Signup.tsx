@@ -19,7 +19,27 @@ import {
   loginWithGoogle,
   registerWithEmail,
 } from "../services/auth.service";
+import type { AuthResponse } from "../services/auth.service";
 import { saveAuthSession } from "../store/authStore";
+
+type AuthError = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+};
+
+const getAuthErrorMessage = (error: unknown, fallback: string) => {
+  if (typeof error !== "object" || error === null) {
+    return fallback;
+  }
+
+  const authError = error as AuthError;
+
+  return authError.response?.data?.message || authError.message || fallback;
+};
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -38,11 +58,14 @@ const Signup = () => {
 
     try {
       const authResponse = await registerWithEmail(name, email, password);
-      saveAuthSession(authResponse);
+      saveAuthSession({
+        user: authResponse.user,
+        token: authResponse.token,
+      });
       navigate("/");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        err.response?.data?.message || "Signup failed. Please try again."
+        getAuthErrorMessage(err, "Signup failed. Please try again.")
       );
     } finally {
       setLoading(false);
@@ -55,13 +78,14 @@ const Signup = () => {
 
     try {
       const authResponse = await loginWithGoogle();
-      saveAuthSession(authResponse);
+      saveAuthSession({
+        user: authResponse.user,
+        token: authResponse.token,
+      });
       navigate("/");
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Google signup failed. Please try again."
+        getAuthErrorMessage(err, "Google signup failed. Please try again.")
       );
     } finally {
       setGoogleLoading(false);

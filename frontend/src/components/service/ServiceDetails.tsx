@@ -15,6 +15,7 @@ import {
 
 import Navbar from "../layout/Navbar";
 import Footer from "../layout/Footer";
+import { getAuthToken } from "../../store/authStore";
 
 const ServiceDetails = () => {
   const { slug } = useParams();
@@ -69,6 +70,7 @@ const ServiceDetails = () => {
     try {
       setLoading(true);
 
+      const token = getAuthToken();
       const response = await fetch(
         "http://localhost:5001/api/bookings",
         {
@@ -76,6 +78,7 @@ const ServiceDetails = () => {
 
           headers: {
             "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
 
           body: JSON.stringify({

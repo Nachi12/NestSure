@@ -10,6 +10,26 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { loginWithEmail, loginWithGoogle } from "../services/auth.service";
 import { saveAuthSession, saveSessionAuth } from "../store/authStore";
+import type { AuthResponse } from "../services/auth.service";
+
+type AuthError = {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+  message?: string;
+};
+
+const getAuthErrorMessage = (error: unknown, fallback: string) => {
+  if (typeof error !== "object" || error === null) {
+    return fallback;
+  }
+
+  const authError = error as AuthError;
+
+  return authError.response?.data?.message || authError.message || fallback;
+};
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,12 +42,18 @@ const Login = () => {
   const navigate = useNavigate();
 
   const completeLogin = (
-    authResponse: Awaited<ReturnType<typeof loginWithEmail>>,
+    authResponse: AuthResponse,
   ) => {
     if (rememberMe) {
-      saveAuthSession(authResponse);
+      saveAuthSession({
+        user: authResponse.user,
+        token: authResponse.token,
+      });
     } else {
-      saveSessionAuth(authResponse);
+      saveSessionAuth({
+        user: authResponse.user,
+        token: authResponse.token,
+      });
     }
 
     navigate("/");
@@ -41,9 +67,9 @@ const Login = () => {
     try {
       const authResponse = await loginWithEmail(email, password);
       completeLogin(authResponse);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        err.response?.data?.message || "Login failed. Please try again.",
+        getAuthErrorMessage(err, "Login failed. Please try again."),
       );
     } finally {
       setLoading(false);
@@ -57,11 +83,9 @@ const Login = () => {
     try {
       const authResponse = await loginWithGoogle();
       completeLogin(authResponse);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(
-        err.response?.data?.message ||
-          err.message ||
-          "Google login failed. Please try again.",
+        getAuthErrorMessage(err, "Google login failed. Please try again."),
       );
     } finally {
       setGoogleLoading(false);
@@ -93,7 +117,7 @@ const Login = () => {
           <h2 className="text-4xl font-bold text-primary">Welcome Back</h2>
 
           <p className="mt-4 text-gray-600">
-            Login to continue booking trusted services.
+            Login to Proceed to Checkout trusted services.
           </p>
         </div>
 

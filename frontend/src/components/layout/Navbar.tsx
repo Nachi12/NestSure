@@ -22,6 +22,8 @@ const Navbar = () => {
         behavior: "smooth",
         block: "start",
       });
+    } else {
+      navigate("/");
     }
 
     setMobileMenuOpen(false);

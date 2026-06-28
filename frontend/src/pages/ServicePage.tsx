@@ -1,12 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
-import {
-  Star,
-  ShieldCheck,
-  Clock3,
-} from "lucide-react";
+import { Star, ShieldCheck, Clock3 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import Navbar from "../components/layout/Navbar";
 
@@ -18,16 +15,55 @@ import BookingSideBar from "../components/service/BookingSideBar";
 
 import { servicesData } from "../data/servicesData";
 
+import type {
+  SelectedService,
+  Variant,
+} from "../components/service/ServiceCategoryCard";
+
+type Category = {
+  id: number;
+  title: string;
+  icon: LucideIcon;
+  variants: Variant[];
+};
+
 const ServicePage = () => {
   const { slug } = useParams();
+  const navigate = useNavigate();
 
-  const service =
-    servicesData[
-      slug as keyof typeof servicesData
+  const service = servicesData[slug as keyof typeof servicesData];
+
+const [selectedServices, setSelectedServices] =
+  useState<SelectedService[]>([]);
+
+const handleSelectService = (
+  category: string,
+  variant: Variant
+) => {
+  const selectionKey = `${category}-${variant.id}-${variant.name}`;
+
+  setSelectedServices((current) => {
+    const exists = current.some(
+      (item) => item.selectionKey === selectionKey
+    );
+
+    if (exists) {
+      return current.filter(
+        (item) => item.selectionKey !== selectionKey
+      );
+    }
+
+    return [
+      ...current,
+      {
+        ...variant,
+        category,
+        selectionKey,
+      },
     ];
+  });
+};
 
-  const [selectedVariant, setSelectedVariant] =
-    useState<any>(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -36,39 +72,28 @@ const ServicePage = () => {
   if (!service) {
     return (
       <div className="min-h-screen bg-white">
-
         <Navbar />
 
         <div className="pt-40 text-center">
-
-          <h1 className="text-5xl font-bold text-primary">
-            Service Not Found
-          </h1>
-
+          <h1 className="text-5xl font-bold text-primary">Service Not Found</h1>
         </div>
 
         <Footer />
-
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#F7FAFC]">
-
       {/* NAVBAR */}
       <Navbar />
 
       {/* HERO */}
       <section className="pt-32 pb-20">
-
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
-
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-
             {/* LEFT */}
             <div>
-
               <div
                 className="
                   inline-flex
@@ -83,16 +108,11 @@ const ServicePage = () => {
                   shadow-sm
                 "
               >
-
-                <ShieldCheck
-                  size={18}
-                  className="text-accent"
-                />
+                <ShieldCheck size={18} className="text-accent" />
 
                 <span className="font-medium text-primary">
                   Trusted Professionals
                 </span>
-
               </div>
 
               <h1
@@ -129,53 +149,32 @@ const ServicePage = () => {
                   gap-8
                 "
               >
-
                 <div className="flex items-center gap-3">
+                  <Star size={20} className="text-yellow-500" />
 
-                  <Star
-                    size={20}
-                    className="text-yellow-500"
-                  />
-
-                  <span className="font-medium text-primary">
-                    4.9 Ratings
-                  </span>
-
+                  <span className="font-medium text-primary">4.9 Ratings</span>
                 </div>
 
                 <div className="flex items-center gap-3">
-
-                  <ShieldCheck
-                    size={20}
-                    className="text-accent"
-                  />
+                  <ShieldCheck size={20} className="text-accent" />
 
                   <span className="font-medium text-primary">
                     Verified Experts
                   </span>
-
                 </div>
 
                 <div className="flex items-center gap-3">
-
-                  <Clock3
-                    size={20}
-                    className="text-accent"
-                  />
+                  <Clock3 size={20} className="text-accent" />
 
                   <span className="font-medium text-primary">
                     Quick Service
                   </span>
-
                 </div>
-
               </div>
-
             </div>
 
             {/* RIGHT IMAGE */}
             <div className="relative">
-
               <img
                 src={service.image}
                 alt={service.title}
@@ -187,66 +186,48 @@ const ServicePage = () => {
                   shadow-[0_25px_80px_rgba(0,0,0,0.12)]
                 "
               />
-
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* SERVICE SECTION */}
       <section className="pb-28">
-
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
-
           <div className="grid lg:grid-cols-3 gap-10">
-
             {/* LEFT */}
             <div className="lg:col-span-2">
-
               <div className="space-y-8">
-
-                {service.categories.map(
-                  (category: any) => (
-
-                    <ServiceCategoryCard
-                      key={category.id}
-                      title={category.title}
-                      icon={category.icon}
-                      variants={category.variants}
-                      selectedVariant={
-                        selectedVariant
-                      }
-                      onSelect={setSelectedVariant}
-                    />
-
-                  )
-                )}
-
+                {service.categories.map((category: Category) => (
+                 <ServiceCategoryCard
+  key={category.id}
+  title={category.title}
+  icon={category.icon}
+  variants={category.variants}
+  selectedServices={selectedServices}
+  onSelect={(variant) =>
+    handleSelectService(category.title, variant)
+  }
+/>
+                ))}
               </div>
-
             </div>
 
             {/* RIGHT */}
             <div>
-
-              <BookingSideBar
-                selectedVariant={selectedVariant}
-              />
-
+         <BookingSideBar
+  selectedServices={selectedServices}
+  onCheckout={() => {
+    navigate("/booking", { state: { selectedServices } });
+  }}
+/>
             </div>
-
           </div>
-
         </div>
-
       </section>
 
       {/* FOOTER */}
       <Footer />
-
     </div>
   );
 };

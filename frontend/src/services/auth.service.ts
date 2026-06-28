@@ -1,52 +1,25 @@
 import {
   signInWithPopup,
   GoogleAuthProvider,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  updateProfile,
+  getAuth,
 } from "firebase/auth";
 
 import { auth } from "../config/firebase";
+import api from "./api";
 
 const provider = new GoogleAuthProvider();
 
-// ============================================
-// TYPES
-// ============================================
-
 export type AuthUser = {
-  uid: string;
+  id: string;
+  name: string | null;
   email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  authProvider: string;
 };
 
 export type AuthResponse = {
   success: boolean;
   user: AuthUser;
-};
-
-// ============================================
-// GOOGLE LOGIN
-// ============================================
-
-export const loginWithGoogle = async (): Promise<AuthResponse> => {
-  try {
-    const result = await signInWithPopup(auth, provider);
-
-    return {
-      success: true,
-      user: {
-        uid: result.user.uid,
-        email: result.user.email,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  token: string;
 };
 
 // ============================================
@@ -58,24 +31,24 @@ export const loginWithEmail = async (
   password: string
 ): Promise<AuthResponse> => {
   try {
-    const result = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
+    const response = await api.post("/auth/login", { email, password });
 
     return {
       success: true,
       user: {
-        uid: result.user.uid,
-        email: result.user.email,
-        displayName: result.user.displayName,
-        photoURL: result.user.photoURL,
+        id: response.data.user.id,
+        name: response.data.user.name,
+        email: response.data.user.email,
+        authProvider: response.data.user.authProvider,
       },
+      token: response.data.token,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    throw error;
+    // Extract error message from response if available
+    const message =
+      error.response?.data?.message || "Login failed. Please try again.";
+    throw new Error(message);
   }
 };
 
@@ -89,28 +62,61 @@ export const registerWithEmail = async (
   password: string
 ): Promise<AuthResponse> => {
   try {
-    const result = await createUserWithEmailAndPassword(
-      auth,
+    const response = await api.post("/auth/register", {
+      name,
       email,
-      password
-    );
-
-    // Update Firebase display name
-    await updateProfile(result.user, {
-      displayName: name,
+      password,
     });
 
     return {
       success: true,
       user: {
-        uid: result.user.uid,
-        email: result.user.email,
-        displayName: name,
-        photoURL: result.user.photoURL,
+        id: response.data.user.id,
+        name: response.data.user.name,
+        email: response.data.user.email,
+        authProvider: response.data.user.authProvider,
       },
+      token: response.data.token,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    throw error;
+    const message =
+      error.response?.data?.message || "Registration failed. Please try again.";
+    throw new Error(message);
+  }
+};
+
+// ============================================
+// GOOGLE LOGIN
+// ============================================
+
+export const loginWithGoogle = async (): Promise<AuthResponse> => {
+  try {
+    // Use Firebase to get the Google ID token
+    const result = await signInWithPopup(auth, provider);
+    const idToken = await result.user.getIdToken();
+
+    // Send the ID token to our backend to verify and get our JWT token
+    const response = await api.post("/auth/google", { idToken });
+
+    return {
+      success: true,
+      user: {
+        id: response.data.user.id,
+        name: response.data.user.name,
+        email: response.data.user.email,
+        authProvider: response.data.user.authProvider,
+      },
+      token: response.data.token,
+    };
+  } catch (error: any) {
+    console.error(error);
+    let message = "Google login failed. Please try again.";
+    if (error.response?.data?.message) {
+      message = error.response.data.message;
+    } else if (error.message) {
+      message = error.message;
+    }
+    throw new Error(message);
   }
 };

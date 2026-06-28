@@ -3,28 +3,26 @@ import {
   ArrowRight,
   Check,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
-type Variant = {
+export type Variant = {
   id: number;
-
   name: string;
-
   price: number;
-
   duration: string;
-
   features: string[];
+};
+
+export type SelectedService = Variant & {
+  selectionKey: string;
+  category: string;
 };
 
 type Props = {
   title: string;
-
-  icon: any;
-
+  icon: LucideIcon;
   variants: Variant[];
-
-  selectedVariant: Variant | null;
-
+  selectedServices: SelectedService[];
   onSelect: (variant: Variant) => void;
 };
 
@@ -32,7 +30,7 @@ const ServiceCategoryCard = ({
   title,
   icon: Icon,
   variants,
-  selectedVariant,
+  selectedServices,
   onSelect,
 }: Props) => {
   return (
@@ -46,7 +44,6 @@ const ServiceCategoryCard = ({
         overflow-hidden
       "
     >
-
       {/* HEADER */}
       <div
         className="
@@ -58,7 +55,6 @@ const ServiceCategoryCard = ({
           border-gray-100
         "
       >
-
         <div
           className="
             w-16
@@ -70,16 +66,13 @@ const ServiceCategoryCard = ({
             justify-center
           "
         >
-
           <Icon
             size={28}
             className="text-primary"
           />
-
         </div>
 
         <div>
-
           <h2
             className="
               text-2xl
@@ -93,17 +86,16 @@ const ServiceCategoryCard = ({
           <p className="text-gray-500 mt-1">
             Select your preferred package
           </p>
-
         </div>
-
       </div>
 
       {/* VARIANTS */}
       <div className="p-7 space-y-5">
-
         {variants.map((variant) => {
-          const isSelected =
-            selectedVariant?.id === variant.id;
+          const selectionKey = `${title}-${variant.id}-${variant.name}`;
+          const isSelected = selectedServices.some(
+            (item) => item.selectionKey === selectionKey
+          );
 
           return (
             <div
@@ -124,7 +116,6 @@ const ServiceCategoryCard = ({
                 }
               `}
             >
-
               {/* SELECTED BADGE */}
               {isSelected && (
                 <div
@@ -141,20 +132,16 @@ const ServiceCategoryCard = ({
                     justify-center
                   "
                 >
-
                   <Check
                     size={18}
                     className="text-white"
                   />
-
                 </div>
               )}
 
               {/* TOP */}
               <div className="flex justify-between">
-
                 <div>
-
                   <h3
                     className="
                       text-xl
@@ -174,17 +161,12 @@ const ServiceCategoryCard = ({
                       text-gray-500
                     "
                   >
-
                     <Clock3 size={16} />
-
                     <span>{variant.duration}</span>
-
                   </div>
-
                 </div>
 
                 <div className="text-right">
-
                   <h4
                     className="
                       text-3xl
@@ -194,48 +176,43 @@ const ServiceCategoryCard = ({
                   >
                     ₹{variant.price}
                   </h4>
-
                 </div>
-
               </div>
 
               {/* FEATURES */}
               <div className="mt-6 space-y-3">
-
-                {variant.features.map(
-                  (feature, index) => (
-
+                {variant.features.map((feature, index) => (
+                  <div
+                    key={`${variant.id}-${index}`}
+                    className="
+                      flex
+                      items-center
+                      gap-3
+                    "
+                  >
                     <div
-                      key={index}
                       className="
-                        flex
-                        items-center
-                        gap-3
+                        w-2
+                        h-2
+                        rounded-full
+                        bg-accent
                       "
-                    >
+                    />
 
-                      <div
-                        className="
-                          w-2
-                          h-2
-                          rounded-full
-                          bg-accent
-                        "
-                      />
-
-                      <span className="text-gray-600">
-                        {feature}
-                      </span>
-
-                    </div>
-
-                  )
-                )}
-
+                    <span className="text-gray-600">
+                      {feature}
+                    </span>
+                  </div>
+                ))}
               </div>
 
               {/* BUTTON */}
               <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSelect(variant);
+                }}
                 className={`
                   mt-7
                   w-full
@@ -255,21 +232,16 @@ const ServiceCategoryCard = ({
                   }
                 `}
               >
-
                 {isSelected
                   ? "Selected"
                   : "Choose Service"}
 
                 <ArrowRight size={18} />
-
               </button>
-
             </div>
           );
         })}
-
       </div>
-
     </div>
   );
 };

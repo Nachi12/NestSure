@@ -4,7 +4,10 @@
 // ============================================
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../components/layout/Navbar";
 
+import Footer from "../components/layout/Footer";
 import {
   ArrowRight,
   BadgeCheck,
@@ -124,12 +127,52 @@ const serviceData = {
   },
 };
 
-const ServiceDetails = () => {
-  const [selectedCategory, setSelectedCategory] =
-    useState<any>(null);
+type ServiceItem = {
+  key: string;
+  category: string;
+  name: string;
+  price: number;
+  duration: string;
+  features: string[];
+};
 
-  const [selectedService, setSelectedService] =
-    useState<any>(null);
+const ServiceDetails = () => {
+  const navigate = useNavigate();
+  const [selectedServices, setSelectedServices] =
+    useState<ServiceItem[]>([]);
+
+  const totalPrice = selectedServices.reduce(
+    (total, item) => total + item.price,
+    0
+  );
+
+  const handleSelectService = (
+    category: string,
+    item: Omit<ServiceItem, "key" | "category">
+  ) => {
+    const key = `${category}-${item.name}`;
+
+    setSelectedServices((current) => {
+      const exists = current.some(
+        (serviceItem) => serviceItem.key === key
+      );
+
+      if (exists) {
+        return current.filter(
+          (serviceItem) => serviceItem.key !== key
+        );
+      }
+
+      return [
+        ...current,
+        {
+          ...item,
+          key,
+          category,
+        },
+      ];
+    });
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -140,6 +183,7 @@ const ServiceDetails = () => {
 
   return (
     <div className="min-h-screen bg-[#F7F9FC]">
+      <Navbar/>
 
       {/* HERO */}
       <section className="pt-32 pb-20">
@@ -326,7 +370,7 @@ const ServiceDetails = () => {
                     <div className="p-8 space-y-6">
 
                       {category.subTypes.map(
-                        (item: any, idx: number) => (
+                        (item, idx) => (
 
                           <div
                             key={idx}
@@ -338,8 +382,11 @@ const ServiceDetails = () => {
                               duration-300
                               cursor-pointer
                               ${
-                                selectedService?.name ===
-                                item.name
+                                selectedServices.some(
+                                  (serviceItem) =>
+                                    serviceItem.key ===
+                                    `${category.title}-${item.name}`
+                                )
                                   ? "border-accent bg-accent/5 shadow-lg"
                                   : "border-gray-100 hover:border-accent/40"
                               }
@@ -431,11 +478,8 @@ const ServiceDetails = () => {
                             {/* BUTTON */}
                             <button
                               onClick={() => {
-                                setSelectedCategory(
-                                  category.title
-                                );
-
-                                setSelectedService(
+                                handleSelectService(
+                                  category.title,
                                   item
                                 );
                               }}
@@ -452,16 +496,22 @@ const ServiceDetails = () => {
                                 justify-center
                                 gap-3
                                 ${
-                                  selectedService?.name ===
-                                  item.name
+                                  selectedServices.some(
+                                    (serviceItem) =>
+                                      serviceItem.key ===
+                                      `${category.title}-${item.name}`
+                                  )
                                     ? "bg-accent text-white"
                                     : "bg-[#F4F6FA] hover:bg-accent hover:text-white text-primary"
                                 }
                               `}
                             >
 
-                              {selectedService?.name ===
-                              item.name
+                              {selectedServices.some(
+                                (serviceItem) =>
+                                  serviceItem.key ===
+                                  `${category.title}-${item.name}`
+                              )
                                 ? "Selected"
                                 : "Choose Service"}
 
@@ -513,7 +563,7 @@ const ServiceDetails = () => {
                   Review your selected service.
                 </p>
 
-                {!selectedService ? (
+                {selectedServices.length === 0 ? (
 
                   <div
                     className="
@@ -550,11 +600,11 @@ const ServiceDetails = () => {
                         text-primary
                       "
                     >
-                      No Service Selected
+                      No Services Selected
                     </h3>
 
                     <p className="text-gray-500 mt-3">
-                      Choose a service package to
+                      Choose service packages to
                       continue.
                     </p>
 
@@ -564,116 +614,95 @@ const ServiceDetails = () => {
 
                   <div className="mt-10">
 
-                    {/* CATEGORY */}
-                    <div
-                      className="
-                        bg-[#F7FAFC]
-                        rounded-2xl
-                        p-5
-                      "
-                    >
+                    {/* SELECTED SERVICES */}
+                    <div className="space-y-4">
+                      {selectedServices.map((item) => (
+                        <div
+                          key={item.key}
+                          className="
+                            bg-[#F7FAFC]
+                            rounded-2xl
+                            p-5
+                          "
+                        >
+                          <p className="text-gray-500 text-sm">
+                            {item.category}
+                          </p>
 
-                      <p className="text-gray-500 text-sm">
-                        Category
-                      </p>
+                          <h3
+                            className="
+                              mt-2
+                              text-xl
+                              font-bold
+                              text-primary
+                            "
+                          >
+                            {item.name}
+                          </h3>
 
-                      <h3
-                        className="
-                          mt-2
-                          text-xl
-                          font-bold
-                          text-primary
-                        "
-                      >
-                        {selectedCategory}
-                      </h3>
+                          <div
+                            className="
+                              mt-4
+                              flex
+                              items-center
+                              justify-between
+                            "
+                          >
+                            <span className="text-gray-500">
+                              {item.duration}
+                            </span>
 
+                            <span
+                              className="
+                                text-xl
+                                font-bold
+                                text-primary
+                              "
+                            >
+                              ₹{item.price}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
 
-                    {/* SERVICE */}
                     <div
                       className="
                         mt-5
-                        bg-[#F7FAFC]
                         rounded-2xl
+                        border
+                        border-gray-100
                         p-5
+                        flex
+                        items-center
+                        justify-between
                       "
                     >
+                      <span className="text-gray-500">
+                        Total
+                      </span>
 
-                      <p className="text-gray-500 text-sm">
-                        Selected Package
-                      </p>
-
-                      <h3
+                      <span
                         className="
-                          mt-2
-                          text-2xl
+                          text-3xl
                           font-bold
                           text-primary
                         "
                       >
-                        {selectedService.name}
-                      </h3>
-
-                      <div
-                        className="
-                          mt-4
-                          flex
-                          items-center
-                          justify-between
-                        "
-                      >
-
-                        <span className="text-gray-500">
-                          Duration
-                        </span>
-
-                        <span className="font-semibold">
-                          {
-                            selectedService.duration
-                          }
-                        </span>
-
-                      </div>
-
-                      <div
-                        className="
-                          mt-3
-                          flex
-                          items-center
-                          justify-between
-                        "
-                      >
-
-                        <span className="text-gray-500">
-                          Price
-                        </span>
-
-                        <span
-                          className="
-                            text-2xl
-                            font-bold
-                            text-primary
-                          "
-                        >
-                          ₹
-                          {
-                            selectedService.price
-                          }
-                        </span>
-
-                      </div>
-
+                        ₹{totalPrice}
+                      </span>
                     </div>
 
                     {/* BOOK BUTTON */}
                     <button
+                      onClick={() => navigate("/booking", { state: { selectedServices } })}
                       className="
                         mt-8
                         w-full
                         bg-accent
                         hover:bg-[#169d8b]
-                        text-white
+                        text-black
+                        hover:text-white
                         py-5
                         rounded-2xl
                         font-semibold
@@ -683,7 +712,7 @@ const ServiceDetails = () => {
                         shadow-[0_15px_40px_rgba(31,175,154,0.25)]
                       "
                     >
-                      Continue Booking
+                      Proceed to Checkout
                     </button>
 
                   </div>
@@ -699,7 +728,7 @@ const ServiceDetails = () => {
         </div>
 
       </section>
-
+                <Footer/>
     </div>
   );
 };

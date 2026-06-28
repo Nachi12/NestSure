@@ -125,10 +125,9 @@ const Hero = () => {
                 max-w-2xl
               "
             >
-              Book verified professionals for cleaning,
-              repairs, plumbing, electrical work,
-              painting, and much more — all through one
-              seamless platform.
+              Experience hassle-free home services with verified professionals.
+              From deep cleaning to electrical repairs, book trusted experts in minutes
+              and enjoy peace of mind with our satisfaction guarantee.
             </p>
 
             {/* SEARCH BAR */}

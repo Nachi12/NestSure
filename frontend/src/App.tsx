@@ -10,6 +10,8 @@ import {
 
 import HomePage from "./pages/HomePage";
 import ServiceDetails from "./pages/ServiceDetails";
+import ServicePage from "./pages/ServicePage";
+import Booking from "./pages/Booking";
 import Login from "./pages/Login";
 
 import Signup from "./pages/Signup";
@@ -32,9 +34,21 @@ function App() {
 
         {/* DYNAMIC SERVICE PAGE */}
         <Route
-  path="/service/:slug"
-  element={<ServiceDetails />}
-/>
+          path="/service/:slug"
+          element={<ServiceDetails />}
+        />
+
+        {/* BOOKING */}
+        <Route
+          path="/booking"
+          element={<Booking />}
+        />
+
+        {/* SERVICE PAGE (for services like electrician, plumbing, etc.) */}
+        <Route
+          path="/services/:service"
+          element={<ServicePage />}
+        />
 
         {/* AUTH */}
         <Route

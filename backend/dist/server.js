@@ -114,6 +114,7 @@ app.use((req, res) => {
         message: "Route Not Found",
     });
 });
+
 const PORT = process.env.PORT || 5001;
 app.listen(Number(PORT), "0.0.0.0", () => {
     console.log(`🚀 NestSure Server running on port ${PORT}`);

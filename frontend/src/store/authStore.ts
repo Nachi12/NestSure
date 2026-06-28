@@ -9,11 +9,16 @@ import type {
 
 export const saveAuthSession = ({
   user,
-}: AuthResponse) => {
+  token,
+}: {
+  user: AuthUser;
+  token: string;
+}) => {
   localStorage.setItem(
     "user",
     JSON.stringify(user)
   );
+  localStorage.setItem("nestsure_token", token);
 };
 
 // ============================================
@@ -22,11 +27,16 @@ export const saveAuthSession = ({
 
 export const saveSessionAuth = ({
   user,
-}: AuthResponse) => {
+  token,
+}: {
+  user: AuthUser;
+  token: string;
+}) => {
   sessionStorage.setItem(
     "user",
     JSON.stringify(user)
   );
+  sessionStorage.setItem("nestsure_token", token);
 };
 
 // ============================================
@@ -42,11 +52,24 @@ export const getAuthUser = (): AuthUser | null => {
 };
 
 // ============================================
+// GET TOKEN
+// ============================================
+
+export const getAuthToken = (): string | null => {
+  return (
+    localStorage.getItem("nestsure_token") ||
+    sessionStorage.getItem("nestsure_token")
+  );
+};
+
+// ============================================
 // LOGOUT
 // ============================================
 
 export const clearAuth = () => {
   localStorage.removeItem("user");
+  localStorage.removeItem("nestsure_token");
 
   sessionStorage.removeItem("user");
+  sessionStorage.removeItem("nestsure_token");
 };

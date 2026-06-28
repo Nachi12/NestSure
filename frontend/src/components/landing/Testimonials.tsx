@@ -41,7 +41,7 @@ const Testimonials = () => {
           </h2>
 
           <p className="mt-6 text-lg text-gray-600">
-            Thousands of customers rely on NestSure for trusted home services.
+            Thousands of homeowners trust NestSure for reliable, vetted home services — from cleaning to repairs, every booking is backed by our satisfaction guarantee.
           </p>
         </div>
 

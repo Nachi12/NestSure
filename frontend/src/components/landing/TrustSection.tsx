@@ -119,9 +119,9 @@ const TrustSection = () => {
                 max-w-2xl
               "
             >
-              NestSure is built around reliability, transparency,
-              and customer satisfaction — helping homeowners connect
-              with verified professionals for every essential service.
+              NestSure ensures safety and quality with background-checked professionals,
+              transparent pricing, and a satisfaction guarantee. Book with confidence
+              for any home service need.
             </p>
 
             {/* STATS */}
