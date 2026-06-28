@@ -19,7 +19,7 @@ import {
   loginWithGoogle,
   registerWithEmail,
 } from "../services/auth.service";
-import type { AuthResponse } from "../services/auth.service";
+// import type { AuthResponse } from "../services/auth.service";
 import { saveAuthSession } from "../store/authStore";
 
 type AuthError = {
