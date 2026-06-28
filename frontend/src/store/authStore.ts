@@ -1,5 +1,5 @@
 import type {
-  AuthResponse,
+  
   AuthUser,
 } from "../services/auth.service";
 
